@@ -16,12 +16,24 @@ public abstract class BaseService<T, PK extends Serializable> implements IBaseSe
 
 	@Override
 	public void save(T t) {
-		baseDao.save(t);
+		try{
+			baseDao.save(t);
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("保存出错" + t.toString());
+		}
+		
 	}
 
 	@Override
 	public void saveOfBatch(List<T> tList) {
-		baseDao.saveOfBatch(tList);
+		try {
+			baseDao.saveOfBatch(tList);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException("保存出错" + tList.toString());
+		}
 	}
 
 	@Override

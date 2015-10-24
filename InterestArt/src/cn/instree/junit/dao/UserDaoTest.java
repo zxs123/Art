@@ -1,7 +1,5 @@
 package cn.instree.junit.dao;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 import org.springframework.context.support.AbstractApplicationContext;

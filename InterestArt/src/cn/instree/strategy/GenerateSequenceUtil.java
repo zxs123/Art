@@ -1,4 +1,4 @@
-package cn.instree.util;
+package cn.instree.strategy;
 
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
@@ -7,7 +7,9 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class GenerateSequenceUtil {
+import org.mybatis.spring.SqlSessionTemplate;
+
+public class GenerateSequenceUtil implements IdentifierGenerator{
 
     /** The FieldPosition. */
     private static final FieldPosition HELPER_POSITION = new FieldPosition(0);
@@ -27,7 +29,7 @@ public class GenerateSequenceUtil {
      * 时间格式生成序列
      * @return String
      */
-    public static synchronized String generateSequenceNo() {
+    public synchronized String generate(SqlSessionTemplate sqlSessionTemplate) {
 
         Calendar rightNow = Calendar.getInstance();
 

@@ -2,6 +2,7 @@ package cn.instree.core.base;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -12,8 +13,7 @@ import javax.annotation.Resource;
  
 import org.apache.commons.lang.StringUtils;
 import org.mybatis.spring.SqlSessionTemplate;
- 
-import cn.instree.util.GenerateSequenceUtil;
+
 import cn.instree.util.GenericsUtils;
 import cn.instree.util.ReflectionUtils;
 import cn.instree.util.SQLGenerator;
@@ -102,32 +102,55 @@ public abstract class BaseDao<T, PK extends Serializable> implements IBaseDao<T,
      
     @Override
     public void save(T t) {
-    	//没有使用自增序列
+    	
         if(StringUtils.isEmpty(generator)){
-        	Object obj = ReflectionUtils.invokeGetterMethod(t, idName);
-        	if(obj == null) {
-        		String seq = GenerateSequenceUtil.generateSequenceNo();
-                ReflectionUtils.invokeSetterMethod(t, idName, seq);
+        	generator = "com.instree.strategy.GenerateSequenceUtil";
+        }
+        //没有使用自增序列
+        if(!"native".equals(generator)) {
+        	try{
+        		Object obj = ReflectionUtils.invokeGetterMethod(t, idName);
+            	if(obj == null) {
+            		Class<?> clazz = Class.forName(generator);
+            		Method method = clazz.getMethod("generate", SqlSessionTemplate.class);
+            		String seq = (String) method.invoke(clazz.newInstance(), sqlSessionTemplate);
+                    ReflectionUtils.invokeSetterMethod(t, idName, seq);
+            	}
+        	}catch(Exception e) {
+        		e.printStackTrace();
+        		throw new RuntimeException(e);
         	}
+        	
         }
         this.create(t);
     }
  
     @Override
-    public void saveOfBatch(List<T> tList) {
+    public void saveOfBatch(List<T> tList){
         if(null == tList || tList.isEmpty()){
             return;
         }
         if(StringUtils.isEmpty(generator)){
-        	for(T t : tList){
-        		Object obj = ReflectionUtils.invokeGetterMethod(t, idName);
-            	if(obj == null) {
-            		String seq = GenerateSequenceUtil.generateSequenceNo();
-                    ReflectionUtils.invokeSetterMethod(t, idName, seq);
-            	}
-            }
+        	generator = "com.instree.strategy.GenerateSequenceUtil";
         }
-        
+        if(!"native".equals(generator)) {
+        	try{
+        		Class<?> clazz = Class.forName(generator);
+        		Method method = clazz.getMethod("generate", SqlSessionTemplate.class);
+        		Object o = clazz.newInstance();
+        		for(T t : tList){
+            		Object obj = ReflectionUtils.invokeGetterMethod(t, idName);
+                	if(obj == null) {
+                		String seq = (String) method.invoke(o, sqlSessionTemplate);
+                        ReflectionUtils.invokeSetterMethod(t, idName, seq);
+                	}
+                }
+        	}catch(Exception e) {
+        		e.printStackTrace();
+        		throw new RuntimeException(e);
+        	}
+        	
+        }
          
         this.createOfBatch(tList);
     }
