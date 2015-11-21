@@ -29,7 +29,7 @@
 		</property>
 
 		<property name="configLocation" value="classpath:config/mybatisConfig.xml" />
-		<property name="mapperLocations" value="classpath:config/mybatis/Mapper-*.xml" />
+		<property name="mapperLocations" value="classpath:config/mybatis/*Mapper.xml" />
 	</bean>
 
 	<bean id="sessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">

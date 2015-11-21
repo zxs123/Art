@@ -231,7 +231,11 @@ public class SQLGenerator<T> {
      */
     public <PK> String sql_findOneById(PK id) {
         StringBuilder sql_build = new StringBuilder();
-        sql_build.append("SELECT ").append(columnsStr).append(" FROM ")
+        String columns = columnsStr;
+    	if(columns.indexOf(pkName) < 0) {
+    		columns = pkName + "," + columns;
+    	}
+        sql_build.append("SELECT ").append(columns).append(" FROM ")
                 .append(this.tableName)
                 .append(" WHERE " + pkName + " = " + id +" LIMIT 1");
          
@@ -249,10 +253,13 @@ public class SQLGenerator<T> {
      */
     public String sql_findAll() {
         StringBuilder sql_build = new StringBuilder();
-        sql_build.append("SELECT ").append(columnsStr).append(" FROM ")
+        String columns = columnsStr;
+    	if(columns.indexOf(pkName) < 0) {
+    		columns = pkName + "," + columns;
+    	}
+        sql_build.append("SELECT ").append(columns).append(" FROM ")
                 .append(this.tableName);
         String sql = sql_build.toString();
-        
         return sql;
     }
      
@@ -273,7 +280,7 @@ public class SQLGenerator<T> {
     public String findOneByColumnName(String columnName, Object val,
 			String... symbol) {
     	String columns = columnsStr;
-    	if(columns.indexOf(pkName) == -1) {
+    	if(columns.indexOf(pkName) < 0) {
     		columns = pkName + "," + columns;
     	}
 		StringBuilder sql_build = new StringBuilder();
@@ -296,7 +303,7 @@ public class SQLGenerator<T> {
 	 */
 	public <PK> String sql_findListByColumnName(String columnName,Object val,String... symbol) {
 		String columns = columnsStr;
-    	if(columns.indexOf(pkName) == -1) {
+    	if(columns.indexOf(pkName) < 0) {
     		columns = pkName + "," + columns;
     	}
 		StringBuilder sql_build = new StringBuilder();

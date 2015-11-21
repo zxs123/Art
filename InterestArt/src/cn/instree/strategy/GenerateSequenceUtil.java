@@ -29,23 +29,26 @@ public class GenerateSequenceUtil implements IdentifierGenerator{
      * 时间格式生成序列
      * @return String
      */
-    public synchronized String generate(SqlSessionTemplate sqlSessionTemplate) {
+    public  String generate(SqlSessionTemplate sqlSessionTemplate) {
 
-        Calendar rightNow = Calendar.getInstance();
+    	synchronized(GenerateSequenceUtil.class) {
+    		Calendar rightNow = Calendar.getInstance();
 
-        StringBuffer sb = new StringBuffer();
+            StringBuffer sb = new StringBuffer();
 
-        dateFormat.format(rightNow.getTime(), sb, HELPER_POSITION);
+            dateFormat.format(rightNow.getTime(), sb, HELPER_POSITION);
 
-        numberFormat.format(seq, sb, HELPER_POSITION);
+            numberFormat.format(seq, sb, HELPER_POSITION);
 
-        if (seq == MAX) {
-            seq = 0;
-        } else {
-            seq++;
-        }
+            if (seq == MAX) {
+                seq = 0;
+            } else {
+                seq++;
+            }
 
-        return sb.toString();
+            return sb.toString();
+    	}
+        
     }
     
 }

@@ -1,5 +1,6 @@
 package cn.instree.junit.dao;
 
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -17,8 +18,13 @@ public class UserDaoTest {
 		AbstractApplicationContext ctx = new ClassPathXmlApplicationContext(new String[]{"config/applicationContext.xml"});
 		UserDao userdao = (UserDao)ctx.getBean("UserDao");
 		User user = new User();
-		user.setUsername("'why'");
+		user.setUserName("'why'");
 		userdao.save(user);
+		
+		List<User> list = userdao.findAll();
+		for(int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i).getUserId());
+		}
 		
 		
 //		List<String> arraylist = new ArrayList<String>();

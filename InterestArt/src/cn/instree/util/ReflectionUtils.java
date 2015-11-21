@@ -212,7 +212,7 @@ public abstract class ReflectionUtils {
             final String fieldName) {
         Field field = obtainAccessibleField(obj, fieldName);
         if (field == null) { throw new IllegalArgumentException(
-                "Devkit: could not find field [" + fieldName + "] on target ["
+                "could not find field [" + fieldName + "] on target ["
                         + obj + "]"); }
         Object retval = null;
         try {

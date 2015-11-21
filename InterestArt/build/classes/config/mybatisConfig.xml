@@ -14,6 +14,8 @@
 	
 	<typeAliases>
 		<typeAlias type="cn.instree.commons.Page" alias="Page"/>
+		<typeAlias type="cn.instree.domain.Admin" alias="Admin"/>
+		<typeAlias type="cn.instree.domain.User" alias="User"/>
 	</typeAliases>
 	
 	<plugins>

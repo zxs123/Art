@@ -104,7 +104,7 @@ public abstract class BaseDao<T, PK extends Serializable> implements IBaseDao<T,
     public void save(T t) {
     	
         if(StringUtils.isEmpty(generator)){
-        	generator = "com.instree.strategy.GenerateSequenceUtil";
+        	generator = "cn.instree.strategy.GenerateSequenceUtil";
         }
         //没有使用自增序列
         if(!"native".equals(generator)) {
@@ -131,7 +131,7 @@ public abstract class BaseDao<T, PK extends Serializable> implements IBaseDao<T,
             return;
         }
         if(StringUtils.isEmpty(generator)){
-        	generator = "com.instree.strategy.GenerateSequenceUtil";
+        	generator = "cn.instree.strategy.GenerateSequenceUtil";
         }
         if(!"native".equals(generator)) {
         	try{
@@ -212,14 +212,12 @@ public abstract class BaseDao<T, PK extends Serializable> implements IBaseDao<T,
     public T findOneById(PK id) {
         Map<String, Object> resultMap = sqlSessionTemplate.selectOne(
                 "findOneById", sqlGenerator.sql_findOneById(id));
-         
         return handleResult(resultMap, this.entityClass);
     }
      
     @Override
     public List<T> findAll() {
-        List<Map<String, Object>> resultMapList = sqlSessionTemplate
-                .selectList("findAll", sqlGenerator.sql_findAll());
+        List<Map<String, Object>> resultMapList = sqlSessionTemplate.selectList("findAll", sqlGenerator.sql_findAll());
         List<T> tList = new ArrayList<T>(resultMapList.size());
         for (Map<String, Object> resultMap : resultMapList) {
             T t = handleResult(resultMap, this.entityClass);
@@ -358,6 +356,7 @@ public abstract class BaseDao<T, PK extends Serializable> implements IBaseDao<T,
     }
     
     private T handleResult(Map<String, Object> resultMap, Class<T> tClazz) {
+    	
         T t = null;
         try {
             t = tClazz.newInstance();
@@ -366,12 +365,18 @@ public abstract class BaseDao<T, PK extends Serializable> implements IBaseDao<T,
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        for (Map.Entry<String, Object> entry : resultMap.entrySet()) {
-            String key = entry.getKey();
-            key = currentColumnFieldNames.get(key);
-            Object val = entry.getValue();
-            ReflectionUtils.invokeSetterMethod(t, key, val);
+        for(String key : resultMap.keySet()) {
+        	
+        	Object val = resultMap.get(key);
+        	ReflectionUtils.invokeSetterMethod(t, key, val);
         }
+//        for (Map.Entry<String, Object> entry : resultMap.entrySet()) {
+//            String key = entry.getKey();
+//            key = currentColumnFieldNames.get(key);
+//            Object val = entry.getValue();
+//            //System.out.println(key + ": " + val);
+//            ReflectionUtils.invokeSetterMethod(t, key, val);
+//        }
         return t;
     }
      
