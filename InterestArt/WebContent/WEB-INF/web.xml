@@ -32,7 +32,7 @@
 	<servlet-mapping>
 		<servlet-name>springMVC</servlet-name>
 		<!-- 此处可以可以配置成*.do，对应struts的后缀习惯 -->
-		<url-pattern>/</url-pattern>
+		<url-pattern>*.action</url-pattern>
 	</servlet-mapping>
 
 	<!-- 防止Spring内存溢出监听器 -->
@@ -60,6 +60,6 @@
 	</filter-mapping>
 
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>queryUser.action</welcome-file>
 	</welcome-file-list>
 </web-app>

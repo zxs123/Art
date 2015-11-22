@@ -9,11 +9,14 @@
 	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
-	<!-- 注解扫描包 -->
+	<!-- 注解扫描service包 -->
 	<context:component-scan base-package="cn.instree.web" >
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
 	</context:component-scan>
-		
+	
+	<!-- 注解扫描controller包 -->
+	<context:component-scan base-package="cn.instree.controller" />
+	
 	<!-- 开启注解 -->
 	<mvc:annotation-driven />
 
