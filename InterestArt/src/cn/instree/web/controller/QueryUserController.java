@@ -1,4 +1,4 @@
-package cn.instree.controller;
+package cn.instree.web.controller;
 
 import java.util.List;
 

@@ -20,13 +20,6 @@ public class AdminDaoTest {
 		user.setAdminId("123");
 		userdao.save(user);
 		
-		
-//		List<String> arraylist = new ArrayList<String>();
-//		arraylist.add("201510202354282860000");
-//		arraylist.add("201510202356579470000");
-//		
-//		userdao.removeOfBatch(arraylist);
-		
 	}
 	
 	@Test
